@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class PacienteController implements IPaciente {
@@ -21,6 +22,16 @@ public class PacienteController implements IPaciente {
         List<Paciente> pacientes = pacienteService.getAllPacientes();
 
         return ResponseEntity.status(HttpStatus.OK).body(pacientes);
+    }
+
+    @Override
+    public ResponseEntity<Paciente> getPacienteById(UUID id) {
+        Paciente paciente = pacienteService.getPacienteById(id);
+        if (paciente != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(paciente);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @Override

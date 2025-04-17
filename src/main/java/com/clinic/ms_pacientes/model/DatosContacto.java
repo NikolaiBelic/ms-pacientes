@@ -1,5 +1,6 @@
 package com.clinic.ms_pacientes.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ public class DatosContacto {
 
     @OneToOne
     @JoinColumn(name = "PACIENTE_ID", nullable = false)
+    @JsonBackReference
     private Paciente paciente;
 
     @Column(name = "TELEFONO", length = 9)
@@ -35,6 +37,28 @@ public class DatosContacto {
 
     @Column(name = "PROVINCIA", length = 50)
     private String provincia;
+
+    @Version
+    @Column(name = "VERSION", nullable = false)
+    private Integer version;
+
+    // Constructores
+    public DatosContacto() {
+    }
+
+    public DatosContacto(UUID id, Paciente paciente, String telefono, String email, String calle,
+                         String numero, String codigoPostal, String ciudad, String provincia, Integer version) {
+        this.id = id;
+        this.paciente = paciente;
+        this.telefono = telefono;
+        this.email = email;
+        this.calle = calle;
+        this.numero = numero;
+        this.codigoPostal = codigoPostal;
+        this.ciudad = ciudad;
+        this.provincia = provincia;
+        this.version = version;
+    }
 
     // Getters y setters
     public UUID getId() {
@@ -107,5 +131,9 @@ public class DatosContacto {
 
     public void setProvincia(String provincia) {
         this.provincia = provincia;
+    }
+
+    public Integer getVersion() {
+        return version;
     }
 }

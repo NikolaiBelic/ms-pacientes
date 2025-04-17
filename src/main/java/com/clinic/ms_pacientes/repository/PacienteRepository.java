@@ -19,6 +19,13 @@ public interface PacienteRepository extends JpaRepository<Paciente, UUID> {
         """, nativeQuery = true)
     public List<Paciente> getAllPacientes();
 
+    @Query(value = """
+        SELECT *
+        FROM CLINIC_PACIENTE
+        WHERE ID = :id AND DELETE_TS IS NULL
+    """, nativeQuery = true)
+    Paciente getPacienteById(@Param("id") UUID id);
+
     @Transactional
     @Query(value = """
     INSERT INTO CLINIC_PACIENTE (ID, NOMBRE, APELLIDOS, FECHA_NACIMIENTO, GENERO, VERSION)

@@ -27,15 +27,36 @@ public class Paciente {
     @Column(name = "GENERO", nullable = false)
     private String genero;
 
+    @Version
+    @Column(name = "VERSION", nullable = false)
+    private Integer version;
+
     @OneToOne(mappedBy = "paciente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private DatosAdministrativos datosAdministrativos;
 
     @OneToOne(mappedBy = "paciente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private DatosContacto datosContacto;
 
     @OneToOne(mappedBy = "paciente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private DatosFacturacion datosFacturacion;
+
+    // Constructores
+    public Paciente() {
+    }
+
+    public Paciente(UUID id) {
+        this.id = id;
+    }
+
+    public Paciente(String nombre, String apellidos, Date fechaNacimiento, String genero) {
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.fechaNacimiento = fechaNacimiento;
+        this.genero = genero;
+    }
 
     // Getters y setters
     public UUID getId() {
@@ -77,6 +98,8 @@ public class Paciente {
     public void setGenero(String genero) {
         this.genero = genero;
     }
+
+    public Integer getVersion() { return version; }
 
     public DatosAdministrativos getDatosAdministrativos() {
         return datosAdministrativos;

@@ -36,6 +36,27 @@ public class DatosAdministrativos {
     @Column(name = "NUMERO_DOCUMENTO", length = 9)
     private String numeroDocumento;
 
+    @Version
+    @Column(name = "VERSION", nullable = false)
+    private Integer version;
+
+    // Constructores
+    public DatosAdministrativos() {}
+
+    public DatosAdministrativos(UUID id, Paciente paciente, String estadoPaciente, String ciudadNacimiento,
+                                String nacionalidad, String provinciaNacimiento, String tipoDocumento,
+                                String numeroDocumento, Integer version) {
+        this.id = id;
+        this.paciente = paciente;
+        this.estadoPaciente = estadoPaciente;
+        this.ciudadNacimiento = ciudadNacimiento;
+        this.nacionalidad = nacionalidad;
+        this.provinciaNacimiento = provinciaNacimiento;
+        this.tipoDocumento = tipoDocumento;
+        this.numeroDocumento = numeroDocumento;
+        this.version = version;
+    }
+
     // Getters y setters
     public UUID getId() {
         return id;
@@ -100,4 +121,6 @@ public class DatosAdministrativos {
     public void setNumeroDocumento(String numeroDocumento) {
         this.numeroDocumento = numeroDocumento;
     }
+
+    public Integer getVersion() { return version; }
 }

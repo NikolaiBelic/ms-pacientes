@@ -21,16 +21,20 @@ public class PacienteService {
     public List<Paciente> getAllPacientes () {
         return pacienteRepository.getAllPacientes();
     }
+    public Paciente getPacienteById(UUID id) {
+        return pacienteRepository.getPacienteById(id);
+    }
 
     public Paciente createPaciente(Paciente paciente) {
-        paciente.setId(UUID.randomUUID());
+        return pacienteRepository.save(paciente);
+        /*paciente.setId(UUID.randomUUID());
         return pacienteRepository.createPaciente(
                 paciente.getId(),
                 paciente.getNombre(),
                 paciente.getApellidos(),
                 new java.sql.Date(paciente.getFechaNacimiento().getTime()),
                 paciente.getGenero()
-        );
+        );*/
     }
 
 }
