@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class PacienteService {
@@ -21,15 +22,15 @@ public class PacienteService {
         return pacienteRepository.getAllPacientes();
     }
 
-    public ResponseEntity<Paciente> createPaciente(Paciente paciente) {
-        pacienteRepository.createPaciente(
+    public Paciente createPaciente(Paciente paciente) {
+        paciente.setId(UUID.randomUUID());
+        return pacienteRepository.createPaciente(
                 paciente.getId(),
                 paciente.getNombre(),
                 paciente.getApellidos(),
                 new java.sql.Date(paciente.getFechaNacimiento().getTime()),
                 paciente.getGenero()
         );
-        return ResponseEntity.status(HttpStatus.CREATED).body(paciente);
     }
 
 }

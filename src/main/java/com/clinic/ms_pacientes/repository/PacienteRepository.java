@@ -1,7 +1,9 @@
 package com.clinic.ms_pacientes.repository;
 
 import com.clinic.ms_pacientes.model.Paciente;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -17,11 +19,12 @@ public interface PacienteRepository extends JpaRepository<Paciente, UUID> {
         """, nativeQuery = true)
     public List<Paciente> getAllPacientes();
 
+    @Transactional
     @Query(value = """
-    INSERT INTO CLINIC_PACIENTE (ID, NOMBRE, APELLIDOS, FECHA_NACIMIENTO, GENERO)
-    VALUES (:id, :nombre, :apellidos, :fechaNacimiento, :genero)
+    INSERT INTO CLINIC_PACIENTE (ID, NOMBRE, APELLIDOS, FECHA_NACIMIENTO, GENERO, VERSION)
+    VALUES (:id, :nombre, :apellidos, :fechaNacimiento, :genero, 1)
 """, nativeQuery = true)
-    void createPaciente(
+    Paciente createPaciente(
             @Param("id") UUID id,
             @Param("nombre") String nombre,
             @Param("apellidos") String apellidos,

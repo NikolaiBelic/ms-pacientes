@@ -11,7 +11,7 @@ import java.util.UUID;
 public class Paciente {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "NOMBRE", length = 30, nullable = false)

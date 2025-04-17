@@ -25,6 +25,7 @@ public class PacienteController implements IPaciente {
 
     @Override
     public ResponseEntity<Paciente> createPaciente(Paciente paciente) {
-        return pacienteService.createPaciente(paciente);
+        Paciente p = pacienteService.createPaciente(paciente);
+        return ResponseEntity.status(HttpStatus.CREATED).body(p);
     }
 }
