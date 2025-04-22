@@ -21,8 +21,8 @@ public interface IPaciente {
     @PostMapping("/create")
     public ResponseEntity<Paciente> createPaciente(@RequestBody Paciente paciente);
 
-    @PostMapping("/filter")
-    public List<Paciente> findPacientesByFilter(
+    @GetMapping("/filter")
+    public ResponseEntity<List<Paciente>> findPacientesByFilter(
         @RequestParam(required = false) String nombre,
         @RequestParam(required = false) String apellidos,
         @RequestParam(required = false) Date fechaNacimiento,

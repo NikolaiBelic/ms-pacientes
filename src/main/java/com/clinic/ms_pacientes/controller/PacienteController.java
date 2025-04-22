@@ -55,12 +55,13 @@ public class PacienteController implements IPaciente {
             @RequestParam(required = false) String provinciaNacimiento,
             @RequestParam(required = false) String tipoDocumento,
             @RequestParam(required = false) String numeroDocumento
-    )
-    {
-            List<Paciente> pacientes = pacienteService.findPacientesByFilter(
-            nombre, apellidos, fechaNacimiento, genero, estadoPaciente, ciudadNacimiento, nacionalidad, provinciaNacimiento, tipoDocumento, numeroDocumento
-             );
-            return ResponseEntity.status(HttpStatus.OK).body(pacientes);
-             }
+    ) {
+        List<Paciente> pacientes = pacienteService.findPacientesByFilter(
+                nombre, apellidos, fechaNacimiento, genero, estadoPaciente, ciudadNacimiento,
+                nacionalidad, provinciaNacimiento, tipoDocumento, numeroDocumento
+        );
+
+        return ResponseEntity.status(HttpStatus.OK).body(pacientes);
+    }
 
 }
