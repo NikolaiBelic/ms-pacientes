@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,4 +41,26 @@ public class PacienteController implements IPaciente {
         Paciente p = pacienteService.createPaciente(paciente);
         return ResponseEntity.status(HttpStatus.CREATED).body(p);
     }
+
+
+    @Override
+    public ResponseEntity<List<Paciente>> findPacientesByFilter(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) String apellidos,
+            @RequestParam(required = false) Date fechaNacimiento,
+            @RequestParam(required = false) String genero,
+            @RequestParam(required = false) String estadoPaciente,
+            @RequestParam(required = false) String ciudadNacimiento,
+            @RequestParam(required = false) String nacionalidad,
+            @RequestParam(required = false) String provinciaNacimiento,
+            @RequestParam(required = false) String tipoDocumento,
+            @RequestParam(required = false) String numeroDocumento
+    )
+    {
+            List<Paciente> pacientes = pacienteService.findPacientesByFilter(
+            nombre, apellidos, fechaNacimiento, genero, estadoPaciente, ciudadNacimiento, nacionalidad, provinciaNacimiento, tipoDocumento, numeroDocumento
+             );
+            return ResponseEntity.status(HttpStatus.OK).body(pacientes);
+             }
+
 }

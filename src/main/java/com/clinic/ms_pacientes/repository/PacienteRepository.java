@@ -26,6 +26,48 @@ public interface PacienteRepository extends JpaRepository<Paciente, UUID> {
     """, nativeQuery = true)
     Paciente getPacienteById(@Param("id") UUID id);
 
+    @Query(value = """
+    SELECT
+        p.nombre,
+        p.apellidos,
+        p.fechaNacimiento,
+        p.genero,
+        da.estadoPaciente,
+        da.ciudadNacimiento,
+        da.nacionalidad,
+        da.provinciaNacimiento,
+        da.tipoDocumento,
+        da.numeroDocumento
+    FROM
+        CLINIC_PACIENTE p
+    LEFT JOIN
+        CLINIC_DATOS_ADMINISTRATIVOS da ON p.id = da.paciente_id
+    WHERE
+        (:nombre IS NULL OR p.nombre = :nombre) AND
+        (:apellidos IS NULL OR p.apellidos = :apellidos) AND
+        (:fechaNacimiento IS NULL OR p.fechaNacimiento = :fechaNacimiento) AND
+        (:genero IS NULL OR p.genero = :genero) AND
+        (:estadoPaciente IS NULL OR da.estadoPaciente = :estadoPaciente) AND
+        (:ciudadNacimiento IS NULL OR da.ciudadNacimiento = :ciudadNacimiento) AND
+        (:nacionalidad IS NULL OR da.nacionalidad = :nacionalidad) AND
+        (:provinciaNacimiento IS NULL OR da.provinciaNacimiento = :provinciaNacimiento) AND
+        (:tipoDocumento IS NULL OR da.tipoDocumento = :tipoDocumento) AND
+        (:numeroDocumento IS NULL OR da.numeroDocumento = :numeroDocumento)
+    """, nativeQuery = true)
+    List<Paciente> findPacientesByFilter(
+            @Param("nombre") String nombre,
+            @Param("apellidos") String apellidos,
+            @Param("fechaNacimiento") Date fechaNacimiento,
+            @Param("genero") String genero,
+            @Param("estadoPaciente") String estadoPaciente,
+            @Param("ciudadNacimiento") String ciudadNacimiento,
+            @Param("nacionalidad") String nacionalidad,
+            @Param("provinciaNacimiento") String provinciaNacimiento,
+            @Param("tipoDocumento") String tipoDocumento,
+            @Param("numeroDocumento") String numeroDocumento
+    );
+
+
     @Transactional
     @Query(value = """
     INSERT INTO CLINIC_PACIENTE (ID, NOMBRE, APELLIDOS, FECHA_NACIMIENTO, GENERO, VERSION)

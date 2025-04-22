@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,6 +37,23 @@ public class PacienteService {
                 new java.sql.Date(paciente.getFechaNacimiento().getTime()),
                 paciente.getGenero()
         );*/
+    }
+
+    public List<Paciente> findPacientesByFilter(
+            String nombre,
+            String apellidos,
+            Date fechaNacimiento,
+            String genero,
+            String estadoPaciente,
+            String ciudadNacimiento,
+            String nacionalidad,
+            String provinciaNacimiento,
+            String tipoDocumento,
+            String numeroDocumento
+    ) {
+        return pacienteRepository.findPacientesByFilter(nombre, apellidos, fechaNacimiento,
+                genero, estadoPaciente, ciudadNacimiento, nacionalidad, provinciaNacimiento,
+                tipoDocumento, numeroDocumento);
     }
 
 }
