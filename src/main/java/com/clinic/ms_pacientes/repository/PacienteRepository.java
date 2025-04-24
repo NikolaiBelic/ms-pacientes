@@ -71,6 +71,7 @@ public interface PacienteRepository extends JpaRepository<Paciente, UUID> {
         (:tipoDocumento IS NULL OR da.TIPO_DOCUMENTO = :tipoDocumento) AND
         (:numeroDocumento IS NULL OR da.NUMERO_DOCUMENTO = :numeroDocumento) AND
         p.DELETE_TS IS NULL
+    LIMIT 10;
 """, nativeQuery = true)
     List<Paciente> findPacientesByFilter(
             @Param("nombre") String nombre,
