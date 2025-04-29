@@ -2,16 +2,16 @@ package com.clinic.ms_pacientes.service;
 
 import com.clinic.ms_pacientes.model.Paciente;
 import com.clinic.ms_pacientes.repository.PacienteRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -19,6 +19,9 @@ public class PacienteService {
 
     @Autowired
     private PacienteRepository pacienteRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public List<Paciente> getAllPacientes () {
         return pacienteRepository.getAllPacientes();
@@ -54,6 +57,141 @@ public class PacienteService {
         return pacienteRepository.findPacientesByFilter(nombre, apellidos, fechaNacimiento,
                 genero, estadoPaciente, ciudadNacimiento, nacionalidad, provinciaNacimiento,
                 tipoDocumento, numeroDocumento);
+    }
+
+    public List<Paciente> findPacientesByFiltro(String trackingId, int page, int size, Map<String, Object> filtros) {
+        StringBuilder sql = new StringBuilder("SELECT " +
+                " p.NOMBRE, p.APELLIDOS, p.FECHA_NACIMIENTO, p.GENERO" +
+                " FROM CLINIC_PACIENTE p" +
+                " LEFT JOIN CLINIC_DATOS_ADMINISTRATIVOS da ON p.ID = da.PACIENTE_ID" +
+                " WHERE 1 = 1 AND p.DELETE_TS IS NULL");
+        Map<String, Object> paramsQuery = new HashMap<>();
+
+        if (filtros.containsKey("nombre")) {
+            sql.append(" AND p.NOMBRE LIKE :nombre");
+            paramsQuery.put("nombre", "%" + filtros.get("nombre") + "%");
+        }
+
+        if (filtros.containsKey("apellidos")) {
+            sql.append(" AND p.APELLIDOS LIKE :apellidos");
+            paramsQuery.put("apellidos", "%" + filtros.get("apellidos") + "%");
+        }
+
+        if (filtros.containsKey("fechaNacimiento")) {
+            sql.append(" AND p.FECHA_NACIMIENTO LIKE :fechaNacimiento");
+            paramsQuery.put("fechaNacimiento", "%" + filtros.get("fechaNacimiento") + "%");
+        }
+
+        if (filtros.containsKey("genero")) {
+            sql.append(" AND p.GENERO LIKE :genero");
+            paramsQuery.put("genero", "%" + filtros.get("genero") + "%");
+        }
+
+        if (filtros.containsKey("estadoPaciente")) {
+            sql.append(" AND da.ESTADO_PACIENTE LIKE :estadoPaciente");
+            paramsQuery.put("estadoPaciente", "%" + filtros.get("estadoPaciente") + "%");
+        }
+
+        if (filtros.containsKey("ciudadNacimiento")) {
+            sql.append(" AND da.CIUDAD_NACIMIENTO LIKE :ciudadNacimiento");
+            paramsQuery.put("ciudadNacimiento", "%" + filtros.get("ciudadNacimiento") + "%");
+        }
+
+        if (filtros.containsKey("nacionalidad")) {
+            sql.append(" AND da.NACIONALIDAD LIKE :nacionalidad");
+            paramsQuery.put("nacionalidad", "%" + filtros.get("nacionalidad") + "%");
+        }
+
+        if (filtros.containsKey("provinciaNacimiento")) {
+            sql.append(" AND da.PROVINCIA_NACIMIENTO LIKE :provinciaNacimiento");
+            paramsQuery.put("provinciaNacimiento", "%" + filtros.get("provinciaNacimiento") + "%");
+        }
+
+        if (filtros.containsKey("tipoDocumento")) {
+            sql.append(" AND da.TIPO_DOCUMENTO LIKE :tipoDocumento");
+            paramsQuery.put("tipoDocumento", "%" + filtros.get("tipoDocumento") + "%");
+        }
+
+        if (filtros.containsKey("numeroDocumento")) {
+            sql.append(" AND da.NUMERO_DOCUMENTO LIKE :numeroDocumento");
+            paramsQuery.put("numeroDocumento", "%" + filtros.get("numeroDocumento") + "%");
+        }
+
+        sql.append(" ORDER BY p.ID");
+        sql.append(" OFFSET :page ROWS FETCH NEXT :size ROWS ONLY");
+
+        Query query = entityManager.createNativeQuery(sql.toString());
+        query.setParameter("page", page);
+        query.setParameter("size", size);
+        paramsQuery.forEach(query::setParameter);
+
+        System.out.println(sql.toString());
+
+        return query.getResultList();
+    }
+
+    public Long getTotalFiltros(String trackingId, Map<String, Object> filtros) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM CLINIC_PACIENTE p " +
+                "LEFT JOIN CLINIC_DATOS_ADMINISTRATIVOS da ON p.ID = da.PACIENTE_ID " +
+                "WHERE 1 = 1 AND p.DELETE_TS IS NULL");
+        Map<String, Object> paramsQuery = new HashMap<>();
+
+        if (filtros.containsKey("nombre")) {
+            sql.append(" AND p.NOMBRE LIKE :nombre");
+            paramsQuery.put("nombre", "%" + filtros.get("nombre") + "%");
+        }
+
+        if (filtros.containsKey("apellidos")) {
+            sql.append(" AND p.APELLIDOS LIKE :apellidos");
+            paramsQuery.put("apellidos", "%" + filtros.get("apellidos") + "%");
+        }
+
+        if (filtros.containsKey("fechaNacimiento")) {
+            sql.append(" AND p.FECHA_NACIMIENTO LIKE :fechaNacimiento");
+            paramsQuery.put("fechaNacimiento", "%" + filtros.get("fechaNacimiento") + "%");
+        }
+
+        if (filtros.containsKey("genero")) {
+            sql.append(" AND p.GENERO LIKE :genero");
+            paramsQuery.put("genero", "%" + filtros.get("genero") + "%");
+        }
+
+        if (filtros.containsKey("estadoPaciente")) {
+            sql.append(" AND da.ESTADO_PACIENTE LIKE :estadoPaciente");
+            paramsQuery.put("estadoPaciente", "%" + filtros.get("estadoPaciente") + "%");
+        }
+
+        if (filtros.containsKey("ciudadNacimiento")) {
+            sql.append(" AND da.CIUDAD_NACIMIENTO LIKE :ciudadNacimiento");
+            paramsQuery.put("ciudadNacimiento", "%" + filtros.get("ciudadNacimiento") + "%");
+        }
+
+        if (filtros.containsKey("nacionalidad")) {
+            sql.append(" AND da.NACIONALIDAD LIKE :nacionalidad");
+            paramsQuery.put("nacionalidad", "%" + filtros.get("nacionalidad") + "%");
+        }
+
+        if (filtros.containsKey("provinciaNacimiento")) {
+            sql.append(" AND da.PROVINCIA_NACIMIENTO LIKE :provinciaNacimiento");
+            paramsQuery.put("provinciaNacimiento", "%" + filtros.get("provinciaNacimiento") + "%");
+        }
+
+        if (filtros.containsKey("tipoDocumento")) {
+            sql.append(" AND da.TIPO_DOCUMENTO LIKE :tipoDocumento");
+            paramsQuery.put("tipoDocumento", "%" + filtros.get("tipoDocumento") + "%");
+        }
+
+        if (filtros.containsKey("numeroDocumento")) {
+            sql.append(" AND da.NUMERO_DOCUMENTO LIKE :numeroDocumento");
+            paramsQuery.put("numeroDocumento", "%" + filtros.get("numeroDocumento") + "%");
+        }
+
+        Query query = entityManager.createNativeQuery(sql.toString(), Long.class);
+        paramsQuery.forEach(query::setParameter);
+
+        System.out.println(sql.toString());
+
+        return (Long) query.getSingleResult();
     }
 
 }

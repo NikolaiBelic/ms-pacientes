@@ -2,10 +2,12 @@ package com.clinic.ms_pacientes.repository;
 
 import com.clinic.ms_pacientes.model.Paciente;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
 
 import java.sql.Date;
 import java.util.List;
@@ -71,7 +73,6 @@ public interface PacienteRepository extends JpaRepository<Paciente, UUID> {
         (:tipoDocumento IS NULL OR da.TIPO_DOCUMENTO = :tipoDocumento) AND
         (:numeroDocumento IS NULL OR da.NUMERO_DOCUMENTO = :numeroDocumento) AND
         p.DELETE_TS IS NULL
-    LIMIT 10;
 """, nativeQuery = true)
     List<Paciente> findPacientesByFilter(
             @Param("nombre") String nombre,

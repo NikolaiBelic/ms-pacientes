@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RequestMapping
@@ -14,6 +15,15 @@ public interface IPaciente {
 
     @GetMapping
     public ResponseEntity<List<Paciente>> getAllPacientes();
+
+    @PostMapping("/filtro")
+    public ResponseEntity<List<Paciente>> findPacientesByFiltro(
+            @RequestHeader(value = "Tracking-Id") String trackingId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestBody Map<String, Object> filtros
+
+    );
 
     @GetMapping("/{id}")
     public ResponseEntity<Paciente> getPacienteById(@PathVariable("id") UUID id);
@@ -33,6 +43,12 @@ public interface IPaciente {
         @RequestParam(required = false) String provinciaNacimiento,
         @RequestParam(required = false) String tipoDocumento,
         @RequestParam(required = false) String numeroDocumento
+    );
+
+    @PostMapping("/filtro/total")
+    public ResponseEntity<Long> getTotalFiltros(
+            @RequestHeader(value = "Tracking-Id") String trackingId,
+            @RequestBody Map<String, Object> filtros
     );
 
 
