@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Pageable;
 
 
 import java.sql.Date;
@@ -84,7 +85,8 @@ public interface PacienteRepository extends JpaRepository<Paciente, UUID> {
             @Param("nacionalidad") String nacionalidad,
             @Param("provinciaNacimiento") String provinciaNacimiento,
             @Param("tipoDocumento") String tipoDocumento,
-            @Param("numeroDocumento") String numeroDocumento
+            @Param("numeroDocumento") String numeroDocumento,
+            Pageable pageable
     );
 
 

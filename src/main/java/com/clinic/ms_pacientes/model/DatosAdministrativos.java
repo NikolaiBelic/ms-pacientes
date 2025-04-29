@@ -33,7 +33,7 @@ public class DatosAdministrativos {
     @Column(name = "TIPO_DOCUMENTO", length = 20)
     private String tipoDocumento;
 
-    @Column(name = "NUMERO_DOCUMENTO", length = 9)
+    @Column(name = "NUMERO_DOCUMENTO", unique = true, length = 9)
     private String numeroDocumento;
 
     @Version
