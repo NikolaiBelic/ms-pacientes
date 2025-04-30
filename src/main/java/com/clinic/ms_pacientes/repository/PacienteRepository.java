@@ -29,7 +29,7 @@ public interface PacienteRepository extends JpaRepository<Paciente, UUID> {
     """, nativeQuery = true)
     Paciente getPacienteById(@Param("id") UUID id);
 
-    /*@Query(value = """
+    @Query(value = """
             SELECT DISTINCT p
             FROM Paciente p
             LEFT JOIN FETCH p.datosAdministrativos da
@@ -56,7 +56,7 @@ public interface PacienteRepository extends JpaRepository<Paciente, UUID> {
             @Param("provinciaNacimiento") String provinciaNacimiento,
             @Param("tipoDocumento") String tipoDocumento,
             @Param("numeroDocumento") String numeroDocumento
-    );*/
+    );
 
     @Query(value = """
     SELECT DISTINCT p.*

@@ -5,6 +5,8 @@ import com.clinic.ms_pacientes.repository.PacienteRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,11 +62,13 @@ public class PacienteService {
     }
 
     public List<Paciente> findPacientesByFiltro(String trackingId, int page, int size, Map<String, Object> filtros) {
-        StringBuilder sql = new StringBuilder("SELECT " +
-                " p.NOMBRE, p.APELLIDOS, p.FECHA_NACIMIENTO, p.GENERO" +
-                " FROM CLINIC_PACIENTE p" +
-                " LEFT JOIN CLINIC_DATOS_ADMINISTRATIVOS da ON p.ID = da.PACIENTE_ID" +
-                " WHERE 1 = 1 AND p.DELETE_TS IS NULL");
+        StringBuilder sql = new StringBuilder(
+                "SELECT p.*, da.*, dc.*, df.* " +
+                        "FROM CLINIC_PACIENTE p " +
+                        "LEFT JOIN CLINIC_DATOS_ADMINISTRATIVOS da ON p.ID = da.PACIENTE_ID " +
+                        "LEFT JOIN CLINIC_DATOS_CONTACTO dc ON p.ID = dc.PACIENTE_ID " +
+                        "LEFT JOIN CLINIC_DATOS_FACTURACION df ON p.ID = df.PACIENTE_ID " +
+                        "WHERE p.DELETE_TS IS NULL");
         Map<String, Object> paramsQuery = new HashMap<>();
 
         if (filtros.containsKey("nombre")) {
