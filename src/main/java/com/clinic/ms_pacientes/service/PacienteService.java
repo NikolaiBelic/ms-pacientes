@@ -1,5 +1,6 @@
 package com.clinic.ms_pacientes.service;
 
+import com.clinic.ms_pacientes.model.DatosAdministrativos;
 import com.clinic.ms_pacientes.model.Paciente;
 import com.clinic.ms_pacientes.repository.PacienteRepository;
 import jakarta.persistence.EntityManager;
@@ -11,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class PacienteService {
@@ -63,12 +61,13 @@ public class PacienteService {
 
     public List<Paciente> findPacientesByFiltro(String trackingId, int page, int size, Map<String, Object> filtros) {
         StringBuilder sql = new StringBuilder(
-                "SELECT p.*, da.*, dc.*, df.* " +
+                "SELECT p.ID, p.NOMBRE, p.APELLIDOS, p.FECHA_NACIMIENTO, p.GENERO, p.VERSION " +
+                /*"SELECT p.ID, p.NOMBRE, p.APELLIDOS, p.FECHA_NACIMIENTO, p.GENERO, da.ID, " +
+                        "da.TIPO_DOCUMENTO, da.NUMERO_DOCUMENTO, da.NACIONALIDAD, " +
+                        "da.ESTADO_PACIENTE, da.CIUDAD_NACIMIENTO, da.PROVINCIA_NACIMIENTO " +*/
                         "FROM CLINIC_PACIENTE p " +
                         "LEFT JOIN CLINIC_DATOS_ADMINISTRATIVOS da ON p.ID = da.PACIENTE_ID " +
-                        "LEFT JOIN CLINIC_DATOS_CONTACTO dc ON p.ID = dc.PACIENTE_ID " +
-                        "LEFT JOIN CLINIC_DATOS_FACTURACION df ON p.ID = df.PACIENTE_ID " +
-                        "WHERE p.DELETE_TS IS NULL");
+                        "WHERE 1 = 1 AND p.DELETE_TS IS NULL");
         Map<String, Object> paramsQuery = new HashMap<>();
 
         if (filtros.containsKey("nombre")) {
@@ -124,7 +123,7 @@ public class PacienteService {
         sql.append(" ORDER BY p.ID");
         sql.append(" OFFSET :page ROWS FETCH NEXT :size ROWS ONLY");
 
-        Query query = entityManager.createNativeQuery(sql.toString());
+        Query query = entityManager.createNativeQuery(sql.toString(), Paciente.class);
         query.setParameter("page", page);
         query.setParameter("size", size);
         paramsQuery.forEach(query::setParameter);
