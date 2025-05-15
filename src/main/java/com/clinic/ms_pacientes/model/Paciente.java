@@ -181,10 +181,6 @@ public class Paciente {
         this.updatedBy = updatedBy;
     }
 
-    public Boolean isDeleted() {
-        return deleteTs != null;
-    }
-
     public Date getDeleteTs() {
         return deleteTs;
     }

@@ -15,7 +15,7 @@ public class DatosAdministrativos {
     @GeneratedValue
     private UUID id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "PACIENTE_ID", nullable = false)
     @JsonBackReference
     private Paciente paciente;
@@ -179,10 +179,6 @@ public class DatosAdministrativos {
 
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
-    }
-
-    public Boolean isDeleted() {
-        return deleteTs != null;
     }
 
     public Date getDeleteTs() {

@@ -1,6 +1,8 @@
 package com.clinic.ms_pacientes.service;
 
 import com.clinic.ms_pacientes.model.DatosAdministrativos;
+import com.clinic.ms_pacientes.model.DatosContacto;
+import com.clinic.ms_pacientes.model.DatosFacturacion;
 import com.clinic.ms_pacientes.model.Paciente;
 import com.clinic.ms_pacientes.repository.PacienteRepository;
 import jakarta.persistence.EntityManager;
@@ -10,9 +12,12 @@ import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.clinic.ms_pacientes.utils.DateFormat;
 
 import java.sql.Date;
 import java.util.*;
+
+import static com.clinic.ms_pacientes.utils.DateFormat.ajustarFechaAEspana;
 
 @Service
 public class PacienteService {
@@ -31,6 +36,21 @@ public class PacienteService {
     }
 
     public Paciente createPaciente(Paciente paciente) {
+        DatosAdministrativos datosAdministrativos = paciente.getDatosAdministrativos();
+        datosAdministrativos.setPaciente(paciente); // Relación bidireccional
+        paciente.setDatosAdministrativos(datosAdministrativos);
+
+        DatosContacto datosContacto = paciente.getDatosContacto();
+        datosContacto.setPaciente(paciente); // Relación bidireccional
+        paciente.setDatosContacto(datosContacto);
+
+        DatosFacturacion datosFacturacion = paciente.getDatosFacturacion();
+        datosFacturacion.setPaciente(paciente); // Relación bidireccional
+        paciente.setDatosFacturacion(datosFacturacion);
+
+        paciente.setCreateTs(ajustarFechaAEspana(paciente.getCreateTs()));
+        paciente.setUpdateTs(ajustarFechaAEspana(paciente.getUpdateTs()));
+
         return pacienteRepository.save(paciente);
         /*paciente.setId(UUID.randomUUID());
         return pacienteRepository.createPaciente(
@@ -61,7 +81,7 @@ public class PacienteService {
 
     public List<Paciente> findPacientesByFiltro(String trackingId, int page, int size, Map<String, Object> filtros) {
         StringBuilder sql = new StringBuilder(
-                "SELECT p.ID, p.NOMBRE, p.APELLIDOS, p.FECHA_NACIMIENTO, p.GENERO, p.VERSION " +
+                "SELECT p.* " +
                 /*"SELECT p.ID, p.NOMBRE, p.APELLIDOS, p.FECHA_NACIMIENTO, p.GENERO, da.ID, " +
                         "da.TIPO_DOCUMENTO, da.NUMERO_DOCUMENTO, da.NACIONALIDAD, " +
                         "da.ESTADO_PACIENTE, da.CIUDAD_NACIMIENTO, da.PROVINCIA_NACIMIENTO " +*/
