@@ -3,6 +3,8 @@ package com.clinic.ms_pacientes.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -38,15 +40,33 @@ public class DatosAdministrativos {
 
     @Version
     @Column(name = "VERSION", nullable = false)
-    private Integer version;
+    protected Integer version;
+
+    @Column(name = "CREATE_TS")
+    protected Date createTs;
+
+    @Column(name = "CREATED_BY", length = 50)
+    protected String createdBy;
+
+    @Column(name = "UPDATE_TS")
+    protected Date updateTs;
+
+    @Column(name = "UPDATED_BY", length = 50)
+    protected String updatedBy;
+
+    @Column(name = "DELETE_TS")
+    protected Date deleteTs;
+
+    @Column(name = "DELETED_BY", length = 50)
+    protected String deletedBy;
+
 
     // Constructores
     public DatosAdministrativos() {}
 
-    public DatosAdministrativos(UUID id, Paciente paciente, String estadoPaciente, String ciudadNacimiento,
+    public DatosAdministrativos(Paciente paciente, String estadoPaciente, String ciudadNacimiento,
                                 String nacionalidad, String provinciaNacimiento, String tipoDocumento,
-                                String numeroDocumento, Integer version) {
-        this.id = id;
+                                String numeroDocumento) {
         this.paciente = paciente;
         this.estadoPaciente = estadoPaciente;
         this.ciudadNacimiento = ciudadNacimiento;
@@ -54,7 +74,6 @@ public class DatosAdministrativos {
         this.provinciaNacimiento = provinciaNacimiento;
         this.tipoDocumento = tipoDocumento;
         this.numeroDocumento = numeroDocumento;
-        this.version = version;
     }
 
     // Getters y setters
@@ -122,5 +141,63 @@ public class DatosAdministrativos {
         this.numeroDocumento = numeroDocumento;
     }
 
-    public Integer getVersion() { return version; }
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public Date getCreateTs() {
+        return createTs;
+    }
+
+    public void setCreateTs(Date createTs) {
+        this.createTs = createTs;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getUpdateTs() {
+        return updateTs;
+    }
+
+    public void setUpdateTs(Date updateTs) {
+        this.updateTs = updateTs;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public Boolean isDeleted() {
+        return deleteTs != null;
+    }
+
+    public Date getDeleteTs() {
+        return deleteTs;
+    }
+
+    public void setDeleteTs(Date deleteTs) {
+        this.deleteTs = deleteTs;
+    }
+
+    public String getDeletedBy() {
+        return deletedBy;
+    }
+
+    public void setDeletedBy(String deletedBy) {
+        this.deletedBy = deletedBy;
+    }
 }

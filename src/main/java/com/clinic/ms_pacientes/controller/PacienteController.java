@@ -3,6 +3,8 @@ package com.clinic.ms_pacientes.controller;
 import com.clinic.ms_pacientes.client.IPaciente;
 import com.clinic.ms_pacientes.model.Paciente;
 import com.clinic.ms_pacientes.service.PacienteService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +40,8 @@ public class PacienteController implements IPaciente {
     }
 
     @Override
-    public ResponseEntity<Paciente> createPaciente(Paciente paciente) {
+    public ResponseEntity<Paciente> createPaciente(String jsonPaciente) {
+        Paciente paciente = new Gson().fromJson(jsonPaciente, Paciente.class);
         Paciente p = pacienteService.createPaciente(paciente);
         return ResponseEntity.status(HttpStatus.CREATED).body(p);
     }

@@ -29,7 +29,25 @@ public class Paciente {
 
     @Version
     @Column(name = "VERSION", nullable = false)
-    private Integer version;
+    protected Integer version;
+
+    @Column(name = "CREATE_TS")
+    protected Date createTs;
+
+    @Column(name = "CREATED_BY", length = 50)
+    protected String createdBy;
+
+    @Column(name = "UPDATE_TS")
+    protected Date updateTs;
+
+    @Column(name = "UPDATED_BY", length = 50)
+    protected String updatedBy;
+
+    @Column(name = "DELETE_TS")
+    protected Date deleteTs;
+
+    @Column(name = "DELETED_BY", length = 50)
+    protected String deletedBy;
 
     @OneToOne(mappedBy = "paciente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
@@ -99,8 +117,6 @@ public class Paciente {
         this.genero = genero;
     }
 
-    public Integer getVersion() { return version; }
-
     public DatosAdministrativos getDatosAdministrativos() {
         return datosAdministrativos;
     }
@@ -123,5 +139,65 @@ public class Paciente {
 
     public void setDatosFacturacion(DatosFacturacion datosFacturacion) {
         this.datosFacturacion = datosFacturacion;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public Date getCreateTs() {
+        return createTs;
+    }
+
+    public void setCreateTs(Date createTs) {
+        this.createTs = createTs;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getUpdateTs() {
+        return updateTs;
+    }
+
+    public void setUpdateTs(Date updateTs) {
+        this.updateTs = updateTs;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public Boolean isDeleted() {
+        return deleteTs != null;
+    }
+
+    public Date getDeleteTs() {
+        return deleteTs;
+    }
+
+    public void setDeleteTs(Date deleteTs) {
+        this.deleteTs = deleteTs;
+    }
+
+    public String getDeletedBy() {
+        return deletedBy;
+    }
+
+    public void setDeletedBy(String deletedBy) {
+        this.deletedBy = deletedBy;
     }
 }

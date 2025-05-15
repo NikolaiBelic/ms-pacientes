@@ -92,8 +92,8 @@ public interface PacienteRepository extends JpaRepository<Paciente, UUID> {
 
     @Transactional
     @Query(value = """
-    INSERT INTO CLINIC_PACIENTE (ID, NOMBRE, APELLIDOS, FECHA_NACIMIENTO, GENERO, VERSION)
-    VALUES (:id, :nombre, :apellidos, :fechaNacimiento, :genero, 1)
+    INSERT INTO CLINIC_PACIENTE (ID, NOMBRE, APELLIDOS, FECHA_NACIMIENTO, GENERO)
+    VALUES (:id, :nombre, :apellidos, :fechaNacimiento, :genero)
 """, nativeQuery = true)
     Paciente createPaciente(
             @Param("id") UUID id,

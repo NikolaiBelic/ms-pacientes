@@ -29,7 +29,7 @@ public interface IPaciente {
     public ResponseEntity<Paciente> getPacienteById(@PathVariable("id") UUID id);
 
     @PostMapping("/create")
-    public ResponseEntity<Paciente> createPaciente(@RequestBody Paciente paciente);
+    public ResponseEntity<Paciente> createPaciente(@RequestBody String jsonPaciente);
 
     @GetMapping("/filter")
     public ResponseEntity<List<Paciente>> findPacientesByFilter(
