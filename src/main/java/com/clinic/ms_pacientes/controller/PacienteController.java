@@ -54,6 +54,14 @@ public class PacienteController implements IPaciente {
     }
 
     @Override
+    public ResponseEntity<Void> softDeletePacientes(Map<String, Object> pacientes) {
+        List<UUID> ids = (List<UUID>) pacientes.get("ids");
+        String deletedBy = (String) pacientes.get("deletedBy");
+        pacienteService.softDeletePacientes(ids, deletedBy);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Override
     public ResponseEntity<List<Paciente>> findPacientesByFilter(
             String nombre,
             String apellidos,

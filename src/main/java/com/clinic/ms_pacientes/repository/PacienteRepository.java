@@ -102,4 +102,13 @@ public interface PacienteRepository extends JpaRepository<Paciente, UUID> {
             @Param("fechaNacimiento") Date fechaNacimiento,
             @Param("genero") String genero
     );
+
+    @Modifying
+    @Transactional
+    @Query(value = """
+    UPDATE CLINIC_PACIENTE
+    SET DELETE_TS = :deleteTs, DELETED_BY = :deletedBy
+    WHERE ID IN (:ids)
+""", nativeQuery = true)
+    void softDeletePacientes(@Param("ids") List<UUID> ids, @Param("deleteTs") java.util.Date deleteTs, @Param("deletedBy") String deletedBy);
 }

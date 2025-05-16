@@ -34,6 +34,9 @@ public interface IPaciente {
     @PutMapping("/update")
     public ResponseEntity<Paciente> updatePaciente(@RequestBody String jsonPaciente);
 
+    @PatchMapping("/soft-delete")
+    public ResponseEntity<Void> softDeletePacientes(@RequestBody Map<String, Object> pacientes);
+
     @GetMapping("/filter")
     public ResponseEntity<List<Paciente>> findPacientesByFilter(
         @RequestParam(required = false) String nombre,

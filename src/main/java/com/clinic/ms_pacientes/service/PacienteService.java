@@ -55,55 +55,6 @@ public class PacienteService {
         return pacienteRepository.save(paciente);
     }
 
-    /*public Paciente updatePaciente(Paciente paciente) {
-        System.out.println("Paciente ID: " + paciente.getId());
-        if (paciente.getId() == null) {
-            throw new IllegalArgumentException("El ID del paciente no puede ser null para actualizar.");
-        }
-
-        Optional<Paciente> existingPacienteOpt = pacienteRepository.findById(paciente.getId());
-        if (existingPacienteOpt.isEmpty()) {
-            throw new EntityNotFoundException("Paciente no encontrado con ID: " + paciente.getId());
-        }
-
-        Paciente existingPaciente = existingPacienteOpt.get();
-
-        // Actualizar campos principales
-        existingPaciente.setNombre(paciente.getNombre());
-        existingPaciente.setApellidos(paciente.getApellidos());
-        existingPaciente.setGenero(paciente.getGenero());
-        existingPaciente.setFechaNacimiento(paciente.getFechaNacimiento());
-        existingPaciente.setUpdateTs(ajustarFechaAEspana(paciente.getUpdateTs()));
-        existingPaciente.setUpdatedBy(existingPaciente.getUpdatedBy());
-        existingPaciente.setVersion(existingPaciente.getVersion());
-
-        // Actualizar DatosAdministrativos
-        DatosAdministrativos datosAdministrativos = paciente.getDatosAdministrativos();
-        datosAdministrativos.setUpdateTs(ajustarFechaAEspana(datosAdministrativos.getUpdateTs()));
-        datosAdministrativos.setUpdatedBy(datosAdministrativos.getUpdatedBy());
-        datosAdministrativos.setVersion(existingPaciente.getDatosAdministrativos().getVersion());
-        datosAdministrativos.setPaciente(existingPaciente);
-        existingPaciente.setDatosAdministrativos(datosAdministrativos);
-
-        // Actualizar DatosContacto
-        DatosContacto datosContacto = paciente.getDatosContacto();
-        datosContacto.setUpdateTs(ajustarFechaAEspana(datosContacto.getUpdateTs()));
-        datosContacto.setUpdatedBy(datosContacto.getUpdatedBy());
-        datosContacto.setVersion(existingPaciente.getDatosContacto().getVersion());
-        datosContacto.setPaciente(existingPaciente);
-        existingPaciente.setDatosContacto(datosContacto);
-
-        // Actualizar DatosFacturacion
-        DatosFacturacion datosFacturacion = paciente.getDatosFacturacion();
-        datosFacturacion.setUpdateTs(ajustarFechaAEspana(datosFacturacion.getUpdateTs()));
-        datosFacturacion.setUpdatedBy(datosFacturacion.getUpdatedBy());
-        datosFacturacion.setVersion(existingPaciente.getDatosFacturacion().getVersion());
-        datosFacturacion.setPaciente(existingPaciente);
-        existingPaciente.setDatosFacturacion(datosFacturacion);
-
-        return pacienteRepository.save(existingPaciente);
-    }*/
-
     public Paciente updatePaciente(Paciente paciente) {
         System.out.println("Paciente ID: " + paciente.getId());
         if (paciente.getId() == null) {
@@ -114,6 +65,8 @@ public class PacienteService {
         if (existingPacienteOpt.isEmpty()) {
             throw new EntityNotFoundException("Paciente no encontrado con ID: " + paciente.getId());
         }
+
+        System.out.println("Tipo de dato de createTs: " + (paciente.getCreateTs() != null ? paciente.getCreateTs().getClass().getName() : "null"));
 
         Paciente existingPaciente = existingPacienteOpt.get();
 
@@ -166,7 +119,10 @@ public class PacienteService {
         return pacienteRepository.save(existingPaciente);
     }
 
-
+    public void softDeletePacientes(List<UUID> ids, String deletedBy) {
+        java.util.Date deleteTs = new java.util.Date();
+        pacienteRepository.softDeletePacientes(ids, deleteTs, deletedBy);
+    }
 
     public List<Paciente> findPacientesByFilter(
             String nombre,
