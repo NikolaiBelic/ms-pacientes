@@ -46,6 +46,12 @@ public class PacienteController implements IPaciente {
         return ResponseEntity.status(HttpStatus.CREATED).body(p);
     }
 
+    @Override
+    public ResponseEntity<Paciente> updatePaciente(String jsonPaciente) {
+        Paciente paciente = new Gson().fromJson(jsonPaciente, Paciente.class);
+        Paciente p = pacienteService.updatePaciente(paciente);
+        return ResponseEntity.status(HttpStatus.CREATED).body(p);
+    }
 
     @Override
     public ResponseEntity<List<Paciente>> findPacientesByFilter(

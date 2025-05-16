@@ -31,6 +31,9 @@ public interface IPaciente {
     @PostMapping("/create")
     public ResponseEntity<Paciente> createPaciente(@RequestBody String jsonPaciente);
 
+    @PutMapping("/update")
+    public ResponseEntity<Paciente> updatePaciente(@RequestBody String jsonPaciente);
+
     @GetMapping("/filter")
     public ResponseEntity<List<Paciente>> findPacientesByFilter(
         @RequestParam(required = false) String nombre,
