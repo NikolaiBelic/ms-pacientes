@@ -1,5 +1,6 @@
 package com.clinic.ms_pacientes.model;
 
+import com.clinic.ms_pacientes.model.empresa.Empresa;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -22,6 +23,10 @@ public class DatosAdministrativos {
 
     @Column(name = "ESTADO_PACIENTE", length = 50)
     private String estadoPaciente;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "RESPONSABLE_TRATAMIENTO_DATOS_ID")
+    private Empresa responsableTratamientoDatos;
 
     @Column(name = "CIUDAD_NACIMIENTO", length = 50)
     private String ciudadNacimiento;
@@ -195,5 +200,13 @@ public class DatosAdministrativos {
 
     public void setDeletedBy(String deletedBy) {
         this.deletedBy = deletedBy;
+    }
+
+    public Empresa getResponsableTratamientoDatos() {
+        return responsableTratamientoDatos;
+    }
+
+    public void setResponsableTratamientoDatos(Empresa responsableTratamientoDatos) {
+        this.responsableTratamientoDatos = responsableTratamientoDatos;
     }
 }

@@ -4,6 +4,7 @@ import com.clinic.ms_pacientes.model.DatosAdministrativos;
 import com.clinic.ms_pacientes.model.DatosContacto;
 import com.clinic.ms_pacientes.model.DatosFacturacion;
 import com.clinic.ms_pacientes.model.Paciente;
+import com.clinic.ms_pacientes.model.empresa.Empresa;
 import com.clinic.ms_pacientes.repository.PacienteRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
@@ -38,6 +39,17 @@ public class PacienteService {
 
     public Paciente createPaciente(Paciente paciente) {
         DatosAdministrativos datosAdministrativos = paciente.getDatosAdministrativos();
+
+        // Buscar la empresa por ID
+        UUID empresaId = UUID.fromString("90630F2E-7F6A-D11A-E95C-790C6655F474");
+        Empresa responsable = entityManager.find(Empresa.class, empresaId);
+
+        if (responsable == null) {
+            throw new EntityNotFoundException("Empresa no encontrada con ID: " + empresaId);
+        }
+
+        // Asignar la empresa como responsable de tratamiento de datos
+        datosAdministrativos.setResponsableTratamientoDatos(responsable);
         datosAdministrativos.setPaciente(paciente); // Relación bidireccional
         paciente.setDatosAdministrativos(datosAdministrativos);
 
