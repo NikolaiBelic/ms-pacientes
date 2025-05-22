@@ -111,4 +111,40 @@ public interface PacienteRepository extends JpaRepository<Paciente, UUID> {
     WHERE ID IN (:ids)
 """, nativeQuery = true)
     void softDeletePacientes(@Param("ids") List<UUID> ids, @Param("deleteTs") java.util.Date deleteTs, @Param("deletedBy") String deletedBy);
+
+    @Modifying
+    @Transactional
+    @Query(value = """
+    UPDATE CLINIC_CITA
+    SET DELETE_TS = :deleteTs, DELETED_BY = :deletedBy
+    WHERE PACIENTE_ID IN (:ids)
+""", nativeQuery = true)
+    void softDeleteCitas(@Param("ids") List<UUID> ids, @Param("deleteTs") java.util.Date deleteTs, @Param("deletedBy") String deletedBy);
+
+    @Modifying
+    @Transactional
+    @Query(value = """
+    UPDATE CLINIC_DATOS_ADMINISTRATIVOS
+    SET DELETE_TS = :deleteTs, DELETED_BY = :deletedBy
+    WHERE PACIENTE_ID IN (:ids)
+""", nativeQuery = true)
+    void softDeleteDatosAdministrativos(@Param("ids") List<UUID> ids, @Param("deleteTs") java.util.Date deleteTs, @Param("deletedBy") String deletedBy);
+
+    @Modifying
+    @Transactional
+    @Query(value = """
+    UPDATE CLINIC_DATOS_CONTACTO
+    SET DELETE_TS = :deleteTs, DELETED_BY = :deletedBy
+    WHERE PACIENTE_ID IN (:ids)
+""", nativeQuery = true)
+    void softDeleteDatosContacto(@Param("ids") List<UUID> ids, @Param("deleteTs") java.util.Date deleteTs, @Param("deletedBy") String deletedBy);
+
+    @Modifying
+    @Transactional
+    @Query(value = """
+    UPDATE CLINIC_DATOS_FACTURACION
+    SET DELETE_TS = :deleteTs, DELETED_BY = :deletedBy
+    WHERE PACIENTE_ID IN (:ids)
+""", nativeQuery = true)
+    void softDeleteDatosFacturacion(@Param("ids") List<UUID> ids, @Param("deleteTs") java.util.Date deleteTs, @Param("deletedBy") String deletedBy);
 }

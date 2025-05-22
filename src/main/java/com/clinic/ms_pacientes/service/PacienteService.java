@@ -10,6 +10,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,6 @@ public class PacienteService {
     }
 
     public Paciente createPaciente(Paciente paciente) {
-        DatosAdministrativos datosAdministrativos = paciente.getDatosAdministrativos();
 
         // Buscar la empresa por ID
         UUID empresaId = UUID.fromString("90630F2E-7F6A-D11A-E95C-790C6655F474");
@@ -49,15 +49,22 @@ public class PacienteService {
         }
 
         // Asignar la empresa como responsable de tratamiento de datos
+        DatosAdministrativos datosAdministrativos = paciente.getDatosAdministrativos();
         datosAdministrativos.setResponsableTratamientoDatos(responsable);
+        datosAdministrativos.setCreateTs(ajustarFechaAEspana(datosAdministrativos.getCreateTs()));
+        datosAdministrativos.setUpdateTs(ajustarFechaAEspana(datosAdministrativos.getUpdateTs()));
         datosAdministrativos.setPaciente(paciente); // Relación bidireccional
         paciente.setDatosAdministrativos(datosAdministrativos);
 
         DatosContacto datosContacto = paciente.getDatosContacto();
+        datosContacto.setCreateTs(ajustarFechaAEspana(datosContacto.getCreateTs()));
+        datosContacto.setUpdateTs(ajustarFechaAEspana(datosContacto.getUpdateTs()));
         datosContacto.setPaciente(paciente); // Relación bidireccional
         paciente.setDatosContacto(datosContacto);
 
         DatosFacturacion datosFacturacion = paciente.getDatosFacturacion();
+        datosFacturacion.setCreateTs(ajustarFechaAEspana(datosFacturacion.getCreateTs()));
+        datosFacturacion.setUpdateTs(ajustarFechaAEspana(datosFacturacion.getUpdateTs()));
         datosFacturacion.setPaciente(paciente); // Relación bidireccional
         paciente.setDatosFacturacion(datosFacturacion);
 
@@ -131,9 +138,14 @@ public class PacienteService {
         return pacienteRepository.save(existingPaciente);
     }
 
+    @Transactional
     public void softDeletePacientes(List<UUID> ids, String deletedBy) {
         java.util.Date deleteTs = new java.util.Date();
         pacienteRepository.softDeletePacientes(ids, deleteTs, deletedBy);
+        pacienteRepository.softDeleteDatosAdministrativos(ids, deleteTs, deletedBy);
+        pacienteRepository.softDeleteDatosContacto(ids, deleteTs, deletedBy);
+        pacienteRepository.softDeleteDatosFacturacion(ids, deleteTs, deletedBy);
+        pacienteRepository.softDeleteCitas(ids, deleteTs, deletedBy);
     }
 
     public List<Paciente> findPacientesByFilter(
