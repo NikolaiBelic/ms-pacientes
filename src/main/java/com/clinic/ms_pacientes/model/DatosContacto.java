@@ -40,6 +40,9 @@ public class DatosContacto {
     @Column(name = "PROVINCIA", length = 50)
     private String provincia;
 
+    @Column(name = "COPIA_CONTACTO_FACTURACION")
+    private Boolean copiaContactoFacturacion;
+
     @Version
     @Column(name = "VERSION", nullable = false)
     protected Integer version;
@@ -150,6 +153,14 @@ public class DatosContacto {
 
     public void setProvincia(String provincia) {
         this.provincia = provincia;
+    }
+
+    public Boolean getCopiaContactoFacturacion() {
+        return copiaContactoFacturacion;
+    }
+
+    public void setCopiaContactoFacturacion(Boolean copiaContactoFacturacion) {
+        this.copiaContactoFacturacion = copiaContactoFacturacion;
     }
 
     public Integer getVersion() {
