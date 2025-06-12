@@ -116,9 +116,11 @@ public class PacienteService {
         contactoExistente.setEmail(nuevoContacto.getEmail());
         contactoExistente.setCalle(nuevoContacto.getCalle());
         contactoExistente.setNumero(nuevoContacto.getNumero());
+        contactoExistente.setCopiaContactoFacturacion(nuevoContacto.getCopiaContactoFacturacion());
         contactoExistente.setCodigoPostal(nuevoContacto.getCodigoPostal());
         contactoExistente.setCiudad(nuevoContacto.getCiudad());
         contactoExistente.setProvincia(nuevoContacto.getProvincia());
+
         contactoExistente.setUpdateTs(ajustarFechaAEspana(nuevoContacto.getUpdateTs()));
         contactoExistente.setUpdatedBy(nuevoContacto.getUpdatedBy());
 
@@ -187,8 +189,8 @@ public class PacienteService {
         }
 
         if (filtros.containsKey("fechaNacimiento")) {
-            sql.append(" AND p.FECHA_NACIMIENTO LIKE :fechaNacimiento");
-            paramsQuery.put("fechaNacimiento", "%" + filtros.get("fechaNacimiento") + "%");
+            sql.append(" AND p.FECHA_NACIMIENTO = :fechaNacimiento");
+            paramsQuery.put("fechaNacimiento", new java.sql.Date((Long) filtros.get("fechaNacimiento")));
         }
 
         if (filtros.containsKey("genero")) {
