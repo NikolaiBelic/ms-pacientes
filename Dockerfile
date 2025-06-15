@@ -10,6 +10,9 @@ COPY build.gradle .
 COPY settings.gradle .
 COPY src/ src/
 
+# Da permisos de ejecución a gradlew
+RUN chmod +x ./gradlew
+
 # 2. Construye el JAR (esto ejecuta './gradlew bootJar' dentro del contenedor)
 RUN ./gradlew clean bootJar
 
